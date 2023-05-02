@@ -26,8 +26,7 @@ for line in passwd.stdout.split("\n"):
 ##################################################
 #ユーザー作成メイン
 ##################################################
-#登録ユーザー
-userlist = []
+
 with open('useradd.csv', 'r') as f:
     reader = csv.reader(f)
 
@@ -40,7 +39,9 @@ with open('useradd.csv', 'r') as f:
         if index == 0:
             continue
         # print(passwd_account)
+        
         #バリデーションチェック
+        gid_count = 0
         for row in passwd_account:
             #ユーザー名存在チェック
             if " " in line[0] or "" == line[0] :
@@ -54,14 +55,51 @@ with open('useradd.csv', 'r') as f:
             # ユーザーIDチェック
             if row[2] == line[2]:
                 raise ValueError(f"Conflicts with UserID:{line[2]} in existing system!")
-        userlist.append(line)
+            # GID存在チェック
+            if row[3] == line[3]:
+                gid_count = gid_count + 1 
+        #GIDの存在がなければ例外を発出
+        if gid_count == 0:
+            raise ValueError(f"The GID:{line[3]} you specified cannot be found in this system.")
     
-    #ユーザー作成部分
-    for user in userlist:
-        print(user[0])
-        add_command = f""
-    
+        ###################################
+        #ユーザー作成部分
+        ###################################
         
-            # print(row[2])
-# log.write.critical("TEETTETETE")
+        #変数
+        USERID=""
+        GID=""
+        GNAME=""
+        HOMEDIR=""
+        EXPIRE_DATE=""
+        DISABLE_DATE=""
+        COMMENT=""
+        LOGIN_SHELL=""
+        
+        #オプション生成
+        if "" != line[2]:
+            USERID=f"-u {line[2]}"
+        if "" != line[3]:
+            GID=f"-g {line[3]}"
+        if "" != line[4]:
+            GNAME=f"-G {line[4]}"
+        if "" != line[5]:
+            HOMEDIR=f"-b {line[5]}"
+        if "" != line[6]:
+            EXPIRE_DATE=f"-e {line[6]}"
+        if "" != line[7]:
+            DISABLE_DATE=f"-f {line[7]}"
+        if "" != line[8]:
+            COMMENT=f"-c {line[8]}"
+        if "" != line[9]:
+            LOGIN_SHELL=f"-s{line[9]}"
 
+        #生成コマンド
+        add_command = f"useradd {USERID} {GID} {GNAME} {HOMEDIR} {EXPIRE_DATE} {DISABLE_DATE} {COMMENT} {LOGIN_SHELL} -p {line[1]} {line[0]}"
+        
+        #コマンド実行
+        result = cmd.exec(add_command)
+        
+        #例外ハンドリング
+        if result.stderr != "":
+            raise ValueError(f"{result.stderr}")
