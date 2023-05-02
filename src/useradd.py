@@ -31,10 +31,10 @@ args = parser.parse_args()
 #現在のアカウントを取得
 passwd = cmd.exec("cat /etc/passwd")
 for line in passwd.stdout.split("\n"):
+
     #特定の文字のインデックスを取得
-    # idx = line.find(':')
-    # passwd_account.append(line[:idx])
     passwd = line.split(':')
+
     #空白が入っている場合は、無視
     if "" == passwd[0]:
         continue
@@ -55,7 +55,6 @@ with open(args.file, 'r') as f:
         #先頭行は説明なので無視します。
         if index == 0:
             continue
-        # print(passwd_account)
         
         #バリデーションチェック
         for row in passwd_account:
