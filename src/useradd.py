@@ -19,7 +19,7 @@ parser = argparse.ArgumentParser(
             )
  
 # 引数の追加
-parser.add_argument('-f', '--file', help='select mode')
+parser.add_argument('-f', '--file', help='The -f or --file option must be used to specify the configuration file.',required=True)
  
 # 引数を解析する
 args = parser.parse_args()
@@ -44,8 +44,6 @@ for line in passwd.stdout.split("\n"):
 #ユーザー作成メイン
 ##################################################
 
-
-print(args.file)
 with open(args.file, 'r') as f:
     reader = csv.reader(f)
 
