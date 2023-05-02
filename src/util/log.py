@@ -24,8 +24,10 @@ class write:
         logging.info(f"[{dt_now}] {log}")
     def debug(log):
         logging.debug(f"[{dt_now}] {log}")
-        
-##初期定義
+
+##################################
+#初期定義
+##################################
 #ディレクトリがなければ作成
 mkdir.make_directory()
 dt_now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
