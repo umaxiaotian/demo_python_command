@@ -62,10 +62,10 @@ with open(args.file, 'r') as f:
             try:
                 #ユーザー名存在チェック
                 if " " in line[0] or "" == line[0] :
-                    raise SyntaxError(f"The UserName has been entered with a blank space!")
+                    raise SyntaxError(f"The UserName:{line[0]} has been entered with a blank space!")
                 #パスワードチェック
                 if " " in line[1] or "" == line[1] :
-                    raise SyntaxError(f"The Password has been entered with a blank space!")
+                    raise SyntaxError(f"The Password{line[1]} has been entered with a blank space!")
                 # ユーザー名競合チェック
                 if row[0] == line[0]:
                     raise SyntaxError(f"Conflicts with UserName:{line[0]} in existing system!")
