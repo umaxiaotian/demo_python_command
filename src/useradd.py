@@ -9,10 +9,10 @@ import argparse
 #共通変数
 passwd_account = []
 
-# パーサーを作る
+# パーサー作成
 parser = argparse.ArgumentParser(
-            prog='argparseTest', # プログラム名
-            usage='Demonstration of argparser', # プログラムの利用方法
+            prog='Useradd Module', # プログラム名
+            usage='By adding the required configuration file to this program, \nthe user information described in that configuration file is added to the system.', # プログラムの利用方法
             description='description', # 引数のヘルプの前に表示
             epilog='end', # 引数のヘルプの後で表示
             add_help=True, # -h/–help オプションの追加
@@ -59,19 +59,24 @@ with open(args.file, 'r') as f:
         
         #バリデーションチェック
         for row in passwd_account:
-            #ユーザー名存在チェック
-            if " " in line[0] or "" == line[0] :
-                raise ValueError(f"The UserName has been entered with a blank space!")
-            #パスワードチェック
-            if " " in line[1] or "" == line[1] :
-                raise ValueError(f"The Password has been entered with a blank space!")
-            # ユーザー名競合チェック
-            if row[0] == line[0]:
-                raise ValueError(f"Conflicts with UserName:{line[0]} in existing system!")
-            # ユーザーIDチェック
-            if row[2] == line[2]:
-                raise ValueError(f"Conflicts with UserID:{line[2]} in existing system!")
-
+            try:
+                #ユーザー名存在チェック
+                if " " in line[0] or "" == line[0] :
+                    raise SyntaxError(f"The UserName has been entered with a blank space!")
+                #パスワードチェック
+                if " " in line[1] or "" == line[1] :
+                    raise SyntaxError(f"The Password has been entered with a blank space!")
+                # ユーザー名競合チェック
+                if row[0] == line[0]:
+                    raise SyntaxError(f"Conflicts with UserName:{line[0]} in existing system!")
+                # ユーザーIDチェック
+                if row[2] == line[2]:
+                    raise SyntaxError(f"Conflicts with UserID:{line[2]} in existing system!")
+            except Exception as e:
+                log.write.error(f"An exception error has occurred : {e}")
+                print(e)
+                exit(1)
+        
         ###################################
         #ユーザー作成部分
         ###################################
@@ -109,7 +114,11 @@ with open(args.file, 'r') as f:
         
         #コマンド実行
         result = cmd.exec(add_command)
-        
-        #例外ハンドリング
-        if result.stderr != "":
-            raise ValueError(f"{result.stderr}")
+        try:
+            #例外ハンドリング
+            if result.stderr != "":
+                raise ValueError(f"{result.stderr}")
+        except Exception as e:
+            log.write.error(f"Execute command returned an error : {e}")
+            print(e)
+            exit(1)

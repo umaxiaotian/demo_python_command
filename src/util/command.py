@@ -20,6 +20,7 @@ class exec:
             return result
         except Exception as e:
             log.write.warning(f"An exception error has occurred : {e}")
+            exit(1)
         
     #変数を自前のselfに格納し、ドッド演算子で参照できるようにする
     def __init__(self,command):
