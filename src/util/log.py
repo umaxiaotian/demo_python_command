@@ -5,10 +5,6 @@ import os
 import logging
 import datetime
 
-##初期定義
-dt_now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-#ログ出力ファイル
-logging.basicConfig(filename='./log/command.log',level=logging.DEBUG)
 class mkdir:
 #ログディレクトリが存在しなければ、作成する関数
     def make_directory(): 
@@ -29,5 +25,9 @@ class write:
     def debug(log):
         logging.debug(f"[{dt_now}] {log}")
         
+##初期定義
 #ディレクトリがなければ作成
 mkdir.make_directory()
+dt_now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+#ログ出力ファイル
+logging.basicConfig(filename='./log/command.log',level=logging.DEBUG)
