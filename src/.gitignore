@@ -13,3 +13,5 @@ main.spec
 pip-selfcheck.json
 dist
 build
+__pycache__/
+util/__pycache__/

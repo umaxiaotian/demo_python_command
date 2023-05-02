@@ -1,24 +1,9 @@
-#!/usr/bin/python3.6
+#!/usr/bin/python3.9
 
 # -*- coding: utf-8 -*-
 import logging
 import subprocess
-import datetime
-from . import logdir as log
-##初期定義
-dt_now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-
-#ディレクトリがなければ作成
-log.mkdir()
-
-#ログ出力ファイル
-logging.basicConfig(filename='./log/command.log',level=logging.DEBUG)
-
-# logging.debug('debug')
-# logging.info('info')
-# logging.warning('warnig')
-# logging.error('error')
-# logging.critical('critical')
+from . import log
 
 class exec:
     # 標準出力、標準エラー出力を返す関数
@@ -27,10 +12,10 @@ class exec:
         #returnコード0以外が正常値として取得される可能性があるので、何も入力がstderrになければ
         if result.stderr == b"":
             #stderrがなければ
-            logging.info(f"[{dt_now}] [{result.returncode}] [{command}] [{result.stdout}]")
+            log.write.info(f"[{result.returncode}] [{command}] [{result.stdout}]")
         else:
             #stderrが有効であれあ
-            logging.warning(f"[{dt_now}] [{result.returncode}] [{command}] [{result.stderr}]")
+            log.write.error(f"[{result.returncode}] [{command}] [{result.stderr}]")
 
         return result
     #変数を自前のselfに格納し、ドッド演算子で参照できるようにする
