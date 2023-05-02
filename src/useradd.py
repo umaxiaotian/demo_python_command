@@ -4,9 +4,26 @@
 import csv
 from util import command as cmd
 from util import log
+import argparse
 
 #共通変数
 passwd_account = []
+
+# パーサーを作る
+parser = argparse.ArgumentParser(
+            prog='argparseTest', # プログラム名
+            usage='Demonstration of argparser', # プログラムの利用方法
+            description='description', # 引数のヘルプの前に表示
+            epilog='end', # 引数のヘルプの後で表示
+            add_help=True, # -h/–help オプションの追加
+            )
+ 
+# 引数の追加
+parser.add_argument('-f', '--file', help='select mode')
+ 
+# 引数を解析する
+args = parser.parse_args()
+
 ##################################################
 #実行前チェック
 ##################################################
@@ -27,7 +44,9 @@ for line in passwd.stdout.split("\n"):
 #ユーザー作成メイン
 ##################################################
 
-with open('useradd.csv', 'r') as f:
+
+print(args.file)
+with open(args.file, 'r') as f:
     reader = csv.reader(f)
 
 #http://linuxjm.osdn.jp/html/shadow/man8/useradd.8.html
@@ -41,7 +60,6 @@ with open('useradd.csv', 'r') as f:
         # print(passwd_account)
         
         #バリデーションチェック
-        gid_count = 0
         for row in passwd_account:
             #ユーザー名存在チェック
             if " " in line[0] or "" == line[0] :
@@ -55,13 +73,7 @@ with open('useradd.csv', 'r') as f:
             # ユーザーIDチェック
             if row[2] == line[2]:
                 raise ValueError(f"Conflicts with UserID:{line[2]} in existing system!")
-            # GID存在チェック
-            if row[3] == line[3]:
-                gid_count = gid_count + 1 
-        #GIDの存在がなければ例外を発出
-        if gid_count == 0:
-            raise ValueError(f"The GID:{line[3]} you specified cannot be found in this system.")
-    
+
         ###################################
         #ユーザー作成部分
         ###################################
